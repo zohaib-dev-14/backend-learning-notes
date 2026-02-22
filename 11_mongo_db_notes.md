@@ -1,191 +1,59 @@
-# MongoDB & Mongoose Deep Notes
+# MongoDB + ImageKit Integration (Complete Flow Notes)
 
 ---
 
-## 1️⃣ What is MongoDB?
+## 🎯 Goal
 
-MongoDB is a NoSQL database that stores data in BSON (Binary JSON) format.
-
-Unlike SQL databases:
-- No tables
-- No rows
-- No strict schema
-
-Instead:
-- Collections (like tables)
-- Documents (like rows)
-- Flexible structure
-
-Example document:
-
-{
-  _id: ObjectId("6538ab2c..."),
-  name: "Zohaib",
-  age: 22,
-  skills: ["Node.js", "Flutter"]
-}
+User image upload kare →  
+Server file receive kare →  
+ImageKit par upload ho →  
+URL mile →  
+MongoDB mein store ho →  
+Client ko response mile
 
 ---
 
-## 2️⃣ Why MongoDB in Backend?
+## 🧠 Full Architecture Flow
 
-- Flexible schema
-- Easy JSON integration with Node.js
-- Scalable
-- Good for modern web apps
-
-MongoDB works very naturally with JavaScript because data format is JSON-like.
-
----
-
-## 3️⃣ What is Mongoose?
-
-Mongoose is an ODM (Object Data Modeling) library for MongoDB.
-
-It provides:
-- Schema definition
-- Validation
-- Middleware (hooks)
-- Cleaner query syntax
-- Structure over flexible database
-
-MongoDB is schema-less  
-Mongoose adds schema control
+Client (Flutter/Postman)
+        ↓
+HTTP multipart/form-data
+        ↓
+Express Route
+        ↓
+Multer (parse file)
+        ↓
+req.file.buffer
+        ↓
+ImageKit Upload Service
+        ↓
+Image URL returned
+        ↓
+MongoDB (URL saved)
+        ↓
+Response sent
 
 ---
 
-## 4️⃣ Schema vs Model
+## 1️⃣ Why Multer?
 
-### Schema
-Defines structure of document.
+Express by default JSON samajhta hai.
 
-Example:
+Image upload JSON nahi hota.
+It is sent as:
 
-const noteSchema = new mongoose.Schema({
-  title: String,
-  description: String
-})
+Content-Type: multipart/form-data
 
-Schema defines:
-- Fields
-- Data types
-- Rules
+Multer:
+- Raw HTTP stream parse karta hai
+- File aur text fields separate karta hai
+- req.file aur req.body banata hai
 
----
+Example setup:
 
-### Model
+```js
+const multer = require("multer");
 
-const Note = mongoose.model("Note", noteSchema)
-
-Model is a wrapper around collection.
-It allows interaction with MongoDB.
-
-Model = Interface to database.
-
----
-
-## 5️⃣ Default Fields
-
-MongoDB automatically adds:
-
-- _id (Primary key)
-- __v (Version key from Mongoose)
-
-_id is ObjectId:
-- 12 byte value
-- Globally unique
-- Includes timestamp internally
-
----
-
-## 6️⃣ CRUD Operations in Mongoose
-
-### Create
-await Note.create({...})
-
-### Read
-await Note.find()
-await Note.findById(id)
-
-### Update
-await Note.findByIdAndUpdate(id, updateData, { new: true })
-
-### Delete
-await Note.findByIdAndDelete(id)
-
----
-
-## 7️⃣ Query Filtering
-
-Example:
-
-await Note.find({ title: "Test" })
-
-MongoDB uses JSON-style queries.
-
-Operators:
-$gt  (greater than)
-$lt  (less than)
-$in  (inside array)
-$regex (pattern matching)
-
-Example:
-
-await Note.find({ age: { $gt: 18 } })
-
----
-
-## 8️⃣ Data Types in Mongoose
-
-Common types:
-
-String  
-Number  
-Boolean  
-Date  
-Array  
-ObjectId  
-
-Example with references:
-
-user: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "User"
-}
-
----
-
-## 9️⃣ Middleware (Hooks)
-
-Mongoose allows pre and post hooks.
-
-Example:
-
-noteSchema.pre("save", function(next) {
-  console.log("Before saving")
-  next()
-})
-
-Useful for:
-- Hashing password
-- Logging
-- Data manipulation
-
----
-
-## 🔟 Important Concepts to Remember
-
-- MongoDB stores raw data
-- Mongoose adds structure and rules
-- _id is automatically generated
-- Always handle errors in async queries
-- Never trust client data blindly
-
----
-
-## 🚀 Backend Architecture Insight
-
-Request → Controller → Mongoose Model → MongoDB  
-MongoDB → Mongoose → Controller → Response
-
-Mongoose acts as a bridge between Node.js and MongoDB.
+const upload = multer({
+  storage: multer.memoryStorage()
+});
