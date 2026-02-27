@@ -79,6 +79,7 @@ File:
 - `13_authentication_basics.md`
 - `14_race_conditions.md`
 - `15_verification_authZ_authN_basics.md`
+- `16_jsonwebtoken.md`
 
 ---
 
@@ -112,6 +113,10 @@ It focuses on:
 - ImageKit
 - JWT
 - REST API Architecture
+- Validation
+- Verification
+- Role Based Authentication
+- Authorization
 
 ---
 
