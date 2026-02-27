@@ -1,9 +1,9 @@
 # 🚀 Backend Engineering Learning Repository
 
 This repository documents my structured journey into backend development.  
-It contains organized notes, concepts, architecture breakdowns, and real-world implementation patterns.
+It contains organized notes, concepts, architecture breakdowns, and real world implementation patterns.
 
-The focus is not just coding — but understanding how backend systems work internally.
+The focus is not just coding, but understanding how backend systems work internally.
 
 ---
 
@@ -15,12 +15,12 @@ The focus is not just coding — but understanding how backend systems work inte
 - Promises
 - Async/Await
 - Fetch API
-- JavaScript fundamentals for server-side logic
+- JavaScript fundamentals for server side logic
 
 Files:
 - `1_js_arrays.md`
-- `2-js-objects-backend.md`
-- `3_js-function-notes.md`
+- `2_js_objects_backend.md`
+- `3_js_function_notes.md`
 - `4_IIFE.md`
 - `5_async_await.md`
 - `6_promises.md`
